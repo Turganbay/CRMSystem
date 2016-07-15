@@ -1,0 +1,32 @@
+﻿<h2>Events</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <td>Events</td>
+        <td>Course</td>
+    </tr>
+    <tbody ng-repeat="(key, val) in eventsWithCourse | groupBy: 'event_name'">
+        <tr>
+            <td rowspan="{{val.length}}">
+                {{key}}
+            </td>
+            <td>{{val[0].course_name}}</td>
+        </tr>
+        <tr ng-repeat="course in val" ng-if="$index>0">
+            <td>{{course.course_name}}</td>
+        </tr>
+        <tr>
+            <td colspan="2" ng-controller="subscriptionController">
+                
+                
+                <span ng-show="userEventsIds.indexOf(val[0].event_id)==-1 || userId==-1" ng-click="addSubscription(userId, val[0].event_id, 'add')" class="btn btn-default">
+                    Add  {{val[0].event_id}}
+                </span>
+                <span ng-show="userEventsIds.indexOf(val[0].event_id)!=-1 && userId > 0" ng-click="addSubscription(userId, val[0].event_id, 'remove')" class="btn btn-default">
+                    Remove
+                </span>
+            </td>
+        </tr>
+    </tbody>
+
+</table>

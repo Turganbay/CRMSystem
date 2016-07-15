@@ -1,0 +1,78 @@
+﻿<div>
+    <div class="divList">
+        <table class="table table-hover">
+            <tr>
+                <td><b>ID</b></td>
+                <td><b>USERNAME</b></td>
+                <td><b>PASSWORD</b></td>
+                <td><b>EMAIL</b></td>
+                <td><b>ROLE</b></td>
+                <td><b>ACTION</b></td>
+            </tr>
+            <tr ng-repeat="user in users">
+                <td>{{user.id}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.password}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.role}}</td>
+                <td>
+                    <span ng-click="editUser(user)" class="btn btn-primary">Edit</span>
+                    <span ng-click="deleteUser(user)" class="btn btn-danger">Delete</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <span ng-click="AddUserDiv()" class="btn btn-default">
+        Add User
+    </span>
+
+    <div ng-show="divUser">
+        <p class="divHead"></p>
+        <table class="table">
+            <tr>
+                <td><b><i>{{Action}} User</i></b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>Id</b></td>
+                <td>
+                    <input type="text" disabled="disabled" ng-model="userId" />
+                </td>
+            </tr>      
+            <tr>
+                <td><b>Username</b></td>
+                <td>
+                    <input type="text" ng-model="userUsername" />
+                </td>
+                
+            </tr>
+            <tr>
+                <td><b>Password</b></td>
+                <td>
+                    <input type="text" ng-model="userPassword" />
+                </td>
+            </tr>
+            <tr>
+                <td><b>Email</b></td>
+                <td>
+                    <input type="text" ng-model="userEmail" />
+                </td>
+            </tr>
+            <tr>
+                <td><b>Role</b></td>
+                <td>
+                    <input type="text" ng-model="userRole" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" class="btn btn-default" value="Save" ng-click="AddUpdateUser()" />
+                    <input type="button" class="btn btn-danger" value="Cancel" ng-click="Cancel()" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

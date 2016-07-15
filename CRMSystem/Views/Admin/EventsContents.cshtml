@@ -1,0 +1,66 @@
+﻿<div>
+    <div class="divList">
+        <table class="table table-hover">
+            <tr>
+                <td><b>ID</b></td>
+                <td><b>EVENT_ID</b></td>
+                <td><b>COURSE_ID</b></td>
+                <td><b>ACTION</b></td>
+            </tr>
+            <tr ng-repeat="content in eventsContents">
+                <td>{{content.id}}</td>
+                <td>{{content.event_id}}</td>
+                <td>{{content.course_id}}</td>
+                <td>
+                    <span ng-click="editContent(content)" class="btn btn-primary">Edit</span>
+                    <span ng-click="deleteContent(content)" class="btn btn-danger">Delete</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <span ng-click="AddEventsContentDiv()" class="btn btn-default">
+        Add Event
+    </span>
+
+    <div ng-show="divEventsContent">
+        <p class="divHead"></p>
+        <table class="table">
+            <tr>
+                <td><b><i>{{Action}} Events Content</i></b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>Id</b></td>
+                <td>
+                    <input type="text" disabled="disabled" ng-model="contentId" />
+                </td>
+            </tr>
+            <tr>
+                <td><b>Event ID</b></td>
+                <td>
+                    <select ng-model="event_id">
+                        <option ng-repeat="x in eventsList" value="{{x.id}}"  ng-selected="x.id===event_id">{{x.name}}</option>
+                    </select>
+                </td>
+
+            </tr>
+            <tr>
+                <td><b>Course ID</b></td>
+                <td>
+                    <select ng-model="course_id">
+                        <option ng-repeat="x in coursesList" value="{{x.id}}" ng-selected="x.id===course_id">{{x.name}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" class="btn btn-default" value="Save" ng-click="AddUpdateContent()" />
+                    <input type="button" class="btn btn-danger" value="Cancel" ng-click="Cancel()" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

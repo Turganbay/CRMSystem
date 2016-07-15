@@ -1,0 +1,70 @@
+﻿<div>
+    <div class="divList">
+        <table class="table table-hover">
+            <tr>
+                <td><b>ID</b></td>
+                <td><b>NAME</b></td>
+                <td><b>DESCRIPTION</b></td>
+                <td><b>EVENT DATE</b></td>
+                <td><b>ACTION</b></td>
+            </tr>
+            <tr ng-repeat="event in events">
+                <td>{{event.id}}</td>
+                <td>{{event.name}}</td>
+                <td>{{event.description}}</td>
+                <td>{{event.event_date}}</td>
+                <td>
+                    <span ng-click="editEvent(event)" class="btn btn-primary">Edit</span>
+                    <span ng-click="deleteEvent(event)" class="btn btn-danger">Delete</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <span ng-click="AddEventDiv()" class="btn btn-default">
+        Add Event
+    </span>
+
+    <div ng-show="divEvent">
+        <p class="divHead"></p>
+        <table class="table">
+            <tr>
+                <td><b><i>{{Action}} Event</i></b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>Id</b></td>
+                <td>
+                    <input type="text" disabled="disabled" ng-model="eventId" />
+                </td>
+            </tr>
+            <tr>
+                <td><b>Name</b></td>
+                <td>
+                    <input type="text" ng-model="eventName" />
+                </td>
+
+            </tr>
+            <tr>
+                <td><b>Description</b></td>
+                <td>
+                    <textarea ng-model="eventDescription"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Event Date</b></td>
+                <td>
+                    <input type="text" ng-model="eventEventDate" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" class="btn btn-default" value="Save" ng-click="AddUpdateEvent()" />
+                    <input type="button" class="btn btn-danger" value="Cancel" ng-click="Cancel()" />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
