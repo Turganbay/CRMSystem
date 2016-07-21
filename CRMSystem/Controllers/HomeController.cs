@@ -1,9 +1,10 @@
-﻿using CRMSystem.Models;
+﻿using CRMSystem.BLL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CRMSystem.BLL.Repositories;
 
 namespace CRMSystem.Controllers
 {
@@ -12,11 +13,11 @@ namespace CRMSystem.Controllers
         //
         // GET: /Home/
 
-        Repository.Repository repo;
+        Repository repo;
 
         public HomeController() 
         {
-            repo = new Repository.Repository();
+            repo = new Repository();
         }
 
         public ActionResult Index()

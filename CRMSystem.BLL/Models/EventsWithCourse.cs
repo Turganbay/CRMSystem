@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace CRMSystem.Models
+namespace CRMSystem.BLL.Models
 {
-    public class Subscription
+    public class EventsWithCourse
     {
-        public int id { get; set; }
-        public int user_id { get; set; }
         public int event_id { get; set; }
-        public string user_name { get; set; }
         public string event_name { get; set; }
+        public string course_name { get; set; }
     }
 }

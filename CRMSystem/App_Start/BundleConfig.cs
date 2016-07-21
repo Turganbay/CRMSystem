@@ -29,21 +29,21 @@ namespace CRMSystem
 
             // CRMSystemsScripts
 
-            bundles.Add(new ScriptBundle("~/bundles/CRMSystemsScripts").Include(
-                        "~/Scripts/CRMSystemScripts/Module.js",
-                        "~/Scripts/CRMSystemScripts/Router.js",
-                        "~/Scripts/CRMSystemScripts/usersServices.js",
-                        "~/Scripts/CRMSystemScripts/usersController.js",
-                        "~/Scripts/CRMSystemScripts/coursesServices.js",
-                        "~/Scripts/CRMSystemScripts/coursesController.js",
-                        "~/Scripts/CRMSystemScripts/eventsServices.js",
-                        "~/Scripts/CRMSystemScripts/eventsController.js",
-                        "~/Scripts/CRMSystemScripts/eventsContentServices.js",
-                        "~/Scripts/CRMSystemScripts/eventsContentController.js",
-                        "~/Scripts/CRMSystemScripts/subscriptionServices.js",
-                        "~/Scripts/CRMSystemScripts/subscriptionController.js",
-                        "~/Scripts/CRMSystemScripts/loginController.js",
-                        "~/Scripts/CRMSystemScripts/loginServices.js"));
+            bundles.Add(new ScriptBundle("~/bundles/App").Include(
+                        "~/App/Module.js",
+                        "~/App/Router/Router.js",
+                        "~/App/Services/usersServices.js",
+                        "~/App/Controllers/usersController.js",
+                        "~/App/Services/coursesServices.js",
+                        "~/App/Controllers/coursesController.js",
+                        "~/App/Services/eventsServices.js",
+                        "~/App/Controllers/eventsController.js",
+                        "~/App/Services/eventsContentServices.js",
+                        "~/App/Controllers/eventsContentController.js",
+                        "~/App/Services/subscriptionServices.js",
+                        "~/App/Controllers/subscriptionController.js",
+                        "~/App/Controllers/loginController.js",
+                        "~/App/Services/loginServices.js"));
 
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.

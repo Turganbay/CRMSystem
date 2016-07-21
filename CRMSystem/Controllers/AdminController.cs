@@ -1,9 +1,10 @@
-﻿using CRMSystem.Models;
+﻿using CRMSystem.BLL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CRMSystem.BLL.Repositories;
 
 namespace CRMSystem.Controllers
 {
@@ -11,11 +12,11 @@ namespace CRMSystem.Controllers
     {
         //
         // GET: /Admin/
-        Repository.Repository repo;
+        Repository repo;
 
         public AdminController() 
         {
-            repo = new Repository.Repository();
+            repo = new Repository();
         }
 
         public ActionResult Index()
@@ -367,6 +368,7 @@ namespace CRMSystem.Controllers
         // View Subscriptions
         public ActionResult Subscriptions()
         {
+
             return PartialView();
         }
 

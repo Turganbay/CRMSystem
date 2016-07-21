@@ -1,37 +1,32 @@
-﻿using CRMSystem.Models;
+﻿using CRMSystem.BLL.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using CRMSystem.DAL.Domain;
 
-namespace CRMSystem.Repository
+namespace CRMSystem.BLL.Repositories
 {
     public class Repository
     {
-        ConnectDb db;
+        CRMSystemDomain db;
         public Repository()
         {
-            db = new ConnectDb();
+            db = new CRMSystemDomain();
         }
 
         //////////////////////////////////////////////////////////////////
         // GET USER
         public Users getUser(LoginData l)
         {
-
             Users user = new Users();
 
             if (db.isOpen())
-            {
-                var conn = db.GetConnection();
+            {       
+                var reader = db.GetUser(l.username, l.password);
 
-                SqlCommand cmd = new SqlCommand("dbo.getUser", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@username", l.username);
-                cmd.Parameters.AddWithValue("@password", l.password);
-                var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     user.id = Convert.ToInt32(reader["id"]);
@@ -53,15 +48,10 @@ namespace CRMSystem.Repository
             
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.getAllUsers", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                var reader = cmd.ExecuteReader();
+                var reader = db.GetAllUsers();
                 while (reader.Read())
                 {
                     Users user = new Users();
-
                     user.id = Convert.ToInt32(reader["id"]);
                     user.username = reader["username"].ToString();
                     user.password = reader["password"].ToString();
@@ -69,8 +59,8 @@ namespace CRMSystem.Repository
                     user.role = Convert.ToInt32(reader["role"]);
                     list.Add(user);
                 }
-
             }
+
             db.Close();
 
             return list;
@@ -81,15 +71,7 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.addUser", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@username", user.username);
-                cmd.Parameters.AddWithValue("@password", user.password);
-                cmd.Parameters.AddWithValue("@email", user.email);
-                cmd.Parameters.AddWithValue("@role", user.role);
-                cmd.ExecuteNonQuery();
+                db.AddUser(user.username, user.password, user.email, user.role);
             }
             db.Close();
 
@@ -103,12 +85,7 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.getUserById", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", id);
-                var reader = cmd.ExecuteReader();
+                var reader = db.GetUserById(id);
                 while (reader.Read())
                 {
                     user.id = Convert.ToInt32(reader["id"]); 
@@ -116,14 +93,11 @@ namespace CRMSystem.Repository
                     user.password = reader["password"].ToString();
                     user.email = reader["email"].ToString();
                     user.role = Convert.ToInt32(reader["role"]);
-                    
                 }
-
             }
             db.Close();
 
             return user;
-   
         }
 
         // Update User
@@ -131,21 +105,13 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.updateUser", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", user.id);
-                cmd.Parameters.AddWithValue("@username", user.username);
-                cmd.Parameters.AddWithValue("@password", user.password);
-                cmd.Parameters.AddWithValue("@email", user.email);
-                cmd.Parameters.AddWithValue("@role", user.role);
-                cmd.ExecuteNonQuery();
+                db.UpdateUser(user.id, user.username, user.password, user.email, user.role);
             }
+
             db.Close();
 
             return "Successfull";
-        
+
         }
 
         // Delete User
@@ -153,17 +119,11 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.deleteUser", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", userId);
-                cmd.ExecuteNonQuery();
+                db.DeleteUser(userId);
             }
             db.Close();
 
             return "Successfull";
-
         }
 
         //////////////////////////////////////////////////////////////////////
@@ -174,11 +134,8 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.getAllCourses", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                var reader = cmd.ExecuteReader();
+                var reader = db.GetAllCourses();
+               
                 while (reader.Read())
                 {
                     Courses course = new Courses();
@@ -198,13 +155,7 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.addCourse", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@name", course.name);
-                cmd.Parameters.AddWithValue("@description", course.description);
-                cmd.ExecuteNonQuery();
+                db.AddCourse(course.name, course.description);
             }
             db.Close();
 
@@ -218,19 +169,13 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.getCourseById", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", id);
-                var reader = cmd.ExecuteReader();
+                var reader = db.GetCourseById(id);
                 while (reader.Read())
                 {
                     course.id = Convert.ToInt32(reader["id"]);
                     course.name = reader["name"].ToString();
                     course.description = reader["description"].ToString();
                 }
-
             }
             db.Close();
 
@@ -242,14 +187,7 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.updateCourse", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", course.id);
-                cmd.Parameters.AddWithValue("@name", course.name);
-                cmd.Parameters.AddWithValue("@description", course.description);
-                cmd.ExecuteNonQuery();
+                db.UpdateCourse(course.id, course.name, course.description);
             }
             db.Close();
 
@@ -261,12 +199,8 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                db.DeleteCourse(courseId);
 
-                SqlCommand cmd = new SqlCommand("dbo.deleteCourse", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", courseId);
-                cmd.ExecuteNonQuery();
             }
             db.Close();
 
@@ -281,22 +215,16 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.getAllEvents", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                var reader = cmd.ExecuteReader();
+                var reader = db.GetAllEvents();
                 while (reader.Read())
                 {
                     Events e = new Events();
-
                     e.id = Convert.ToInt32(reader["id"]);
                     e.name = reader["name"].ToString();
                     e.description = reader["description"].ToString();
                     e.event_date =  Convert.ToDateTime(reader["event_date"]).ToString("dd.MM.yyyy");
                     list.Add(e);
                 }
-
             }
             db.Close();
 
@@ -308,14 +236,7 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.addEvent", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@name", e.name);
-                cmd.Parameters.AddWithValue("@description", e.description);
-                cmd.Parameters.AddWithValue("@event_date", e.event_date);
-                cmd.ExecuteNonQuery();
+                db.AddEvent(e.name, e.description, e.event_date);
             }
             db.Close();
 
@@ -329,12 +250,8 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                var reader = db.GetEventById(id);
 
-                SqlCommand cmd = new SqlCommand("dbo.getEventById", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", id);
-                var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     e.id = Convert.ToInt32(reader["id"]);
@@ -354,15 +271,8 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                db.UpdateEvent(e.id, e.name, e.description, e.event_date);
 
-                SqlCommand cmd = new SqlCommand("dbo.updateEvent", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", e.id);
-                cmd.Parameters.AddWithValue("@name", e.name);
-                cmd.Parameters.AddWithValue("@description", e.description);
-                cmd.Parameters.AddWithValue("@event_date", e.event_date);
-                cmd.ExecuteNonQuery();
             }
             db.Close();
 
@@ -374,12 +284,8 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                db.DeleteEvent(eventId);
 
-                SqlCommand cmd = new SqlCommand("dbo.deleteEvent", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", eventId);
-                cmd.ExecuteNonQuery();
             }
             db.Close();
 
@@ -393,11 +299,8 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                var reader = db.GetAllEventsContents();
 
-                SqlCommand cmd = new SqlCommand("dbo.getAllEventsContent", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     EventsContent e = new EventsContent();
@@ -419,13 +322,7 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.addEventsContent", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@event_id", e.event_id);
-                cmd.Parameters.AddWithValue("@course_id", e.course_id);
-                cmd.ExecuteNonQuery();
+                db.AddContent(e.event_id, e.course_id);
             }
             db.Close();
 
@@ -439,12 +336,8 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                var reader = db.GetContentById(id);
 
-                SqlCommand cmd = new SqlCommand("dbo.getContentById", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", id);
-                var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     e.id = Convert.ToInt32(reader["id"]);
@@ -464,14 +357,7 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.updateEventsContent", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", e.id);
-                cmd.Parameters.AddWithValue("@event_id", e.event_id);
-                cmd.Parameters.AddWithValue("@course_id", e.course_id);
-                cmd.ExecuteNonQuery();
+                db.UpdateContent(e.id, e.event_id, e.course_id);
             }
             db.Close();
 
@@ -484,12 +370,7 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.deleteEventsContent", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", contentId);
-                cmd.ExecuteNonQuery();
+                db.DeleteContent(contentId);
             }
             db.Close();
 
@@ -503,15 +384,11 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                var reader = db.GetEventsWithCourse();
 
-                SqlCommand cmd = new SqlCommand("dbo.getEventsWithCourse", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     EventsWithCourse e = new EventsWithCourse();
-
                     e.event_id = Convert.ToInt32(reader["event_id"]);
                     e.event_name = reader["event_name"].ToString();
                     e.course_name = reader["course_name"].ToString();
@@ -533,12 +410,8 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                var reader = db.GetUserEventsIds(id);
 
-                SqlCommand cmd = new SqlCommand("dbo.getUserEventsIds", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id", id);
-                var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     int event_id = Convert.ToInt32(reader["event_id"]);
@@ -557,13 +430,7 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
-
-                SqlCommand cmd = new SqlCommand("dbo.addSubscription", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@event_id", s.event_id);
-                cmd.Parameters.AddWithValue("@user_id", s.user_id);
-                cmd.ExecuteNonQuery();
+                db.AddSubscription(s.event_id, s.user_id);
             }
             db.Close();
 
@@ -575,13 +442,8 @@ namespace CRMSystem.Repository
         {
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                db.DeleteSubscription(userId, eventId);
 
-                SqlCommand cmd = new SqlCommand("dbo.deleteSubscription", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@event_id", eventId);
-                cmd.Parameters.AddWithValue("@user_id", userId);
-                cmd.ExecuteNonQuery();
             }
             db.Close();
 
@@ -595,15 +457,11 @@ namespace CRMSystem.Repository
 
             if (db.isOpen())
             {
-                var conn = db.GetConnection();
+                var reader = db.GetAllSubscriptions();
 
-                SqlCommand cmd = new SqlCommand("dbo.getAllSubscriptions", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     Subscription s = new Subscription();
-
                     s.id = Convert.ToInt32(reader["id"]);
                     s.event_id = Convert.ToInt32(reader["event_id"]);
                     s.user_id = Convert.ToInt32(reader["user_id"]);

@@ -29,18 +29,17 @@
                 $scope.Action = "Update";
                 $scope.divUser = true;
             }, function () {
-                alert('Error in getting book records');
+                alert('Error in getting user records');
             });
         }
 
-        // Add OR UPDATE User
+        
         usersHub.client.refresh = function () {
             GetAllUsers();
             console.log('all ok');
         }
-
+        
         $.connection.hub.start().done(function () {
-
             $scope.AddUpdateUser = function () {
                 var User = {
                     username: $scope.userUsername,
@@ -54,7 +53,6 @@
                     User.Id = $scope.userId;
                     var getUserData = usersService.updateUser(User);
                     getUserData.then(function (msg) {
-                        // GetAllUsers();
                         usersHub.server.refreshUsersList();
                         console.log(msg.data);
                         $scope.divUser = false;
@@ -67,7 +65,7 @@
                         chat.server.refreshUsersList();
                         $scope.divUser = false;
                     }, function () {
-                        alert('Error in adding book record');
+                        alert('Error in adding user record');
                     });
                 }
             }
@@ -90,7 +88,7 @@
                 //GetAllUsers();
                 chat.server.refreshUsersList();
             }, function () {
-                alert('Error in deleting book record');
+                alert('Error in deleting user record');
             });
         }
 
